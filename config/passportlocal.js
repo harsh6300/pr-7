@@ -1,20 +1,19 @@
-const passport = require('passport')
-const usermodal = require('../models/usermodels');
-const passportlocal = require('passport-local').Strategy;
+const passport = require('passport');
+const usermodal = require('../models/usermodels')
+const passportlocal = require('passport-local').Strategy;   
 
 passport.use(new passportlocal({
     usernameField : 'name'
 },async(name,password,done)=>{
     try{
         let user = await usermodal.findOne({name : name});
-
+        
         if(!user || user.password != password){
-            console.log("Username and password are not match");
+            console.log("email and password are not match");
             return done(null,false)
         }
 
         return done(null,user)
-
     }catch(err){
         return done(null,false)
     }
@@ -35,7 +34,7 @@ passport.deserializeUser(async(id,done)=>{
         }
 })
 
-passport.checkUser = (req,res,next) => {
+passport.checkuser = (req,res,next) => {
     if(req.isAuthenticated()){
         return next();
     }
@@ -45,7 +44,7 @@ passport.setuser = (req,res,next) => {
     if(req.isAuthenticated()){
         res.locals.users = req.user 
     }
-
+    
     return next();
 }
 
